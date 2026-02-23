@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
 import Home from "./pages/Home";
+import Coleccion from "./pages/Coleccion";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         {/* Rutas públicas */}
         <Route exact path="/" element={<Home />} />
+        <Route exact path="/coleccion" element={<Coleccion />} />
       </Routes>
       <Footer />
     </BrowserRouter>
