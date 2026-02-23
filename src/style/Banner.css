@@ -1,0 +1,275 @@
+/* =============================================
+   BANNER — Carrusel cilíndrico 3D real
+   Paleta: #E8B4B8 · #F3E1DC · #FFFFFF · #D8D8D8
+   ============================================= */
+
+/* =============================================
+   SECCIÓN
+   ============================================= */
+.banner {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  font-family: 'Jost', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* =============================================
+   FONDOS
+   ============================================= */
+.banner__backgrounds {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.banner__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 1.5s ease-in-out;
+  transform: scale(1.06);
+  filter: brightness(0.42) saturate(0.70);
+}
+
+.banner__bg--active {
+  opacity: 1;
+  animation: bgZoom 10s ease-in-out forwards;
+}
+
+@keyframes bgZoom {
+  from { transform: scale(1.06); }
+  to   { transform: scale(1.00); }
+}
+
+.banner__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(5,3,3,0.60) 0%,
+    rgba(5,3,3,0.05) 50%,
+    rgba(5,3,3,0.60) 100%
+  );
+}
+
+/* =============================================
+   TÍTULO CENTRADO ARRIBA
+   ============================================= */
+.banner__content {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  text-align: center;
+  padding: 52px 5vw 0;
+  color: #ffffff;
+  margin-top: 90px;
+}
+
+.banner__subtitle {
+  font-weight: 300;
+  font-size: 0.72rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: #E8B4B8;
+  margin: 0 0 0.6rem;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.1s ease forwards;
+}
+
+.banner__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(2.2rem, 3.8vw, 4.4rem);
+  line-height: 1.1;
+  margin: 0 0 0.5rem;
+  color: #ffffff;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.22s ease forwards;
+}
+
+.banner__desc {
+  font-size: 0.80rem;
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  color: #D8D8D8;
+  margin: 0;
+  opacity: 0;
+  animation: fadeUp 0.7s 0.36s ease forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* =============================================
+   CARRUSEL WRAPPER
+   ============================================= */
+.banner__carousel {
+  position: relative;
+  z-index: 5;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0 36px;
+}
+
+/* =============================================
+   VIEWPORT — ventana que "encuadra" el cilindro.
+   Tiene perspectiva para crear la profundidad 3D.
+   overflow:visible para ver las tarjetas laterales.
+   ============================================= */
+.carousel__viewport {
+  width: 420px;
+  height: 520px;
+  perspective: 1100px;
+  perspective-origin: 50% 50%;
+  overflow: visible;
+  position: relative;
+}
+
+/* =============================================
+   CILINDRO — contenedor que rota en bloque.
+   preserve-3d es CRÍTICO para que las tarjetas
+   hijas mantengan su posición 3D al girar el padre.
+   ============================================= */
+.carousel__cylinder {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  /* La transición suave al girar */
+  transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =============================================
+   TARJETAS — cada una rota a su ángulo fijo
+   en el cilindro y se traslada hacia afuera en Z.
+   El transform viene del JS (inline style).
+   ============================================= */
+.card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 420px;
+  height: 520px;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  backface-visibility: visible;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Brillo glass */
+.card__shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    130deg,
+    rgba(255,255,255,0.18) 0%,
+    rgba(255,255,255,0.00) 50%,
+    rgba(243,225,220,0.08) 100%
+  );
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* =============================================
+   CONTROLES  ← Anterior  •  •  •  Siguiente →
+   ============================================= */
+.carousel__controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 36px;
+}
+
+.carousel__btn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 20px;
+  height: 40px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.30);
+  background: rgba(255,255,255,0.09);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #ffffff;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.25s, border-color 0.25s, transform 0.18s;
+  white-space: nowrap;
+}
+
+.carousel__btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: #ffffff;
+  fill: none;
+  flex-shrink: 0;
+}
+
+.carousel__btn:hover {
+  background: rgba(232,180,184,0.28);
+  border-color: #E8B4B8;
+  transform: scale(1.06);
+}
+
+.carousel__dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.carousel__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.36);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.28s, transform 0.28s;
+}
+
+.carousel__dot--active {
+  background: #E8B4B8;
+  transform: scale(1.55);
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 600px) {
+  .carousel__viewport,
+  .card {
+    width: 260px;
+    height: 340px;
+  }
+
+  .carousel__btn span { display: none; }
+  .carousel__btn { padding: 0 12px; }
+}
